@@ -1,0 +1,29 @@
+/* CMS REXX script to execute a Linux command*/
+/**/
+/* format:*/
+/*
+oscmd Linux-command (tape-address
+*/
+/**/
+/* The tape-address is optional; defaults to 181 */
+/**/
+Trace off;
+Parse arg cmd '(' tDev
+if (length(tDev) = 0)
+then tDev = 181;
+/* Write the Linux command string to the tape */
+'tape rew (' tDev;
+'pipe var cmd | tape' tDev
+'tape wtm (' tDev
+/* Read the stdout file from the tape */
+'tape rew (' tDev
+'tape fsf (' tDev
+/* skip over input file */
+say 'STDOUT output------'
+'pipe tape' tDev '| console'
+/* Read the stderr file from the tape */
+say 'STDERR output ------'
+'pipe tape' tDev '| console'
+/* Read the return code from the tape */
+/* end this script  */
+return(0);
